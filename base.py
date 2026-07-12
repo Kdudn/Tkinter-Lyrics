@@ -23,7 +23,7 @@ if(audio):
 time = 0
 
 class Window():
-	def __init__(self, lyric="", speed=25, x1=0, y1=0, x2=0, y2=0, tween="none", power=4, width=500, height=500, bg="white", fg="black", reverse=False, title="", font="Arial", fontsize="32", textformat="center"):
+	def __init__(self, lyric="", speed=25, x1=0, y1=0, x2=0, y2=0, tween="none", power=4, width=500, height=500, death=1000, bg="white", fg="black", reverse=False, title="", font="Arial", fontsize="32", textformat="center"):
 		self.new_win = tk.Toplevel(root)
 
 		self.width = width
@@ -44,6 +44,8 @@ class Window():
 
 		self.t = 0.0
 
+		self.new_win.after(death, self.die)
+
 		self.new_win.geometry(f"{width}x{height}+{x1}+{y1}")
 		self.new_win.title(title)
 		self.new_win.attributes("-topmost", True)
@@ -56,6 +58,9 @@ class Window():
 		self.reverse = reverse
 
 		self.move()
+
+	def die(self):
+		self.new_win.destroy()
 
 	def flash(self):
 		if self.bg_color == "black":
@@ -108,7 +113,20 @@ class Window():
 
 		self.new_win.after(20, self.move)
 
-root.after(time, lambda:Window("Hello World", 25, 1920, 1080, 210, 110, "out", 4, 300, 300, "black", "white", False, "", 'Arial', '32', "center"))
+	def changex(self, x):
+		self.x1 = self.x2
+		self.y1 = self.y2
+		self.x2 = x
+		self.t = 0
+	def changey(self, y):
+		self.x1 = self.x2
+		self.y1 = self.y2
+		self.y2 = y
+		self.t = 0
+
+win1 = Window("Hello World", 25, 1920, 1080, 210, 110, "out", 4, 300, 300, "black", "white", False, "", 'Arial', '32', "center")
+time += 1000
+root.after(time, lambda:win1.changex(0))
 
 print(time)
 
